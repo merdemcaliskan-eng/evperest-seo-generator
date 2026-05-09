@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from openai import OpenAI
 
 st.set_page_config(page_title="Evperest Etsy SEO Generator", layout="wide")
 
@@ -45,7 +46,14 @@ ana_keyword = st.text_input(
     placeholder="Örnek: beige runner"
 )
 
-st.info("Yakında: Canlı Etsy keyword analizi ve rakip title sistemi eklenecek 🚀")
+st.info("AI destekli Etsy SEO sistemi aktif 🚀")
+
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+free_text = st.text_input(
+    "Ürünü Yaz",
+    placeholder="Örnek: beige farmhouse tapestry"
+)
 
 # Ürün Bilgileri
 urun_tipi = st.selectbox(
@@ -75,6 +83,36 @@ oda = st.selectbox(
 
 # SEO Üretici
 if st.button("SEO OLUŞTUR"):
+
+    ai_prompt = f"""
+    Sen profesyonel Etsy SEO uzmanısın.
+
+    Kullanıcının ürünü:
+    {free_text}
+
+    Şunları üret:
+    1. SEO title
+    2. 13 Etsy tag
+    3. Etsy açıklaması
+    4. Pinterest başlığı
+
+    Modern Etsy SEO mantığına uygun yaz.
+    """
+
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[
+            {"role": "system", "content": "Sen profesyonel Etsy SEO uzmanısın."},
+            {"role": "user", "content": ai_prompt}
+        ]
+    )
+
+    ai_result = response.choices[0].message.content
+
+    st.subheader("AI SEO SONUCU")
+    st.write(ai_result)
+
+    seo_skoru = 85
 
     seo_skoru = 85
 
