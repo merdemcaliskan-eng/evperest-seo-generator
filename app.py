@@ -1,44 +1,81 @@
 import streamlit as st
+import pandas as pd
 
 st.set_page_config(page_title="Evperest Etsy SEO Generator", layout="wide")
 
-st.title("EVPEREST ETSY SEO GENERATOR")
+st.title("EVPEREST ETSY SEO GENERATOR V1")
+
+with st.sidebar:
+    st.header("Yönetim Paneli")
+
+    urunler_text = st.text_area(
+        "Ürün Tipleri",
+        "Runner,Masa Örtüsü,Wall Hanging"
+    )
+
+    renkler_text = st.text_area(
+        "Renkler",
+        "Beige,Black,Brown,Cream,White,Neutral"
+    )
+
+    stiller_text = st.text_area(
+        "Stiller",
+        "Farmhouse,Minimalist,Boho,Rustic,Modern"
+    )
+
+    alanlar_text = st.text_area(
+        "Kullanım Alanları",
+        "Kitchen,Hallway,Dining Room,Living Room"
+    )
+
+    ozellikler_text = st.text_area(
+        "Özellikler",
+        "Washable,Custom,Neutral Decor,Soft Texture"
+    )
+
+urunler = [x.strip() for x in urunler_text.split(",")]
+renkler = [x.strip() for x in renkler_text.split(",")]
+stiller = [x.strip() for x in stiller_text.split(",")]
+alanlar = [x.strip() for x in alanlar_text.split(",")]
+ozellikler = [x.strip() for x in ozellikler_text.split(",")]
 st.write("Runner, masa örtüsü ve duvar örtüsü için hızlı Etsy SEO sistemi")
 
+# Ürün Bilgileri
 urun_tipi = st.selectbox(
     "Ürün Tipi",
-    ["Runner", "Masa Örtüsü", "Wall Hanging"]
+    urunler
 )
 
 renk = st.selectbox(
     "Renk",
-    ["Beige", "Black", "Brown", "Cream", "White", "Neutral"]
+    renkler
 )
 
 stil = st.selectbox(
     "Stil",
-    ["Farmhouse", "Minimalist", "Boho", "Rustic", "Modern"]
+    stiller
 )
 
 oda = st.selectbox(
     "Kullanım Alanı",
-    ["Kitchen", "Hallway", "Dining Room", "Living Room"]
+    alanlar
 )
 
-ozellik = st.selectbox(
+özellik = st.selectbox(
     "Özellik",
-    ["Washable", "Custom", "Neutral Decor", "Soft Texture"]
+    ozellikler
 )
 
+# SEO Üretici
 if st.button("SEO OLUŞTUR"):
 
-    title = f"{renk} {oda} {urun_tipi}, {stil} {urun_tipi}, {ozellik} Home Decor"
+    title = f"{renk} {oda} {urun_tipi}, {stil} {urun_tipi}, {özellik} Home Decor"
 
     tags = [
         f"{oda.lower()} runner",
         f"{stil.lower()} decor",
         f"{renk.lower()} decor",
-        f"{ozellik.lower()}",
+        f"{özellik.lower()}",
         "minimalist home",
         "neutral decor",
         "modern farmhouse",
@@ -50,7 +87,7 @@ if st.button("SEO OLUŞTUR"):
         "home styling"
     ]
 
-    description = f'''
+    açıklama = f'''
 Transform your home with this {stil.lower()} and elegant {urun_tipi.lower()}.
 
 Features:
@@ -79,7 +116,22 @@ Each product is specially produced for your order.
         st.write(f"- {tag}")
 
     st.subheader("AÇIKLAMA")
-    st.text_area("Description", description, height=250)
+    st.text_area("Description", açıklama, height=250)
 
     st.subheader("PINTEREST TITLE")
     st.code(pinterest)
+
+st.divider()
+
+st.subheader("GELECEK SÜRÜMLER")
+
+st.write("""
+- Etsy trend analizi
+- Rakip title analizi
+- Otomatik keyword sistemi
+- Etsy scraping
+- Trend ürün bulucu
+- Pinterest pin generator
+- Çoklu listing üretici
+- Gerçek Etsy SEO skoru
+""")
