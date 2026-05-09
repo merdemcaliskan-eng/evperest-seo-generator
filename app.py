@@ -40,6 +40,13 @@ alanlar = [x.strip() for x in alanlar_text.split(",")]
 ozellikler = [x.strip() for x in ozellikler_text.split(",")]
 st.write("Runner, masa örtüsü ve duvar örtüsü için hızlı Etsy SEO sistemi")
 
+ana_keyword = st.text_input(
+    "Ana Keyword",
+    placeholder="Örnek: beige runner"
+)
+
+st.info("Yakında: Canlı Etsy keyword analizi ve rakip title sistemi eklenecek 🚀")
+
 # Ürün Bilgileri
 urun_tipi = st.selectbox(
     "Ürün Tipi",
@@ -68,6 +75,16 @@ oda = st.selectbox(
 
 # SEO Üretici
 if st.button("SEO OLUŞTUR"):
+
+    seo_skoru = 85
+
+    onerilen_kelime = [
+        "neutral decor",
+        "farmhouse decor",
+        "minimalist rug",
+        "washable runner",
+        "boho decor"
+    ]
 
     title = f"{renk} {oda} {urun_tipi}, {stil} {urun_tipi}, {özellik} Home Decor"
 
@@ -107,6 +124,14 @@ Each product is specially produced for your order.
 '''
 
     pinterest = f"{renk} {stil} {urun_tipi} Decor"
+
+    st.subheader("SEO SKORU")
+    st.progress(seo_skoru)
+    st.write(f"SEO Skoru: {seo_skoru}/100")
+
+    st.subheader("ÖNERİLEN KEYWORDS")
+    for kelime in onerilen_kelime:
+        st.write(f"✓ {kelime}")
 
     st.subheader("SEO TITLE")
     st.code(title)
