@@ -1,60 +1,65 @@
 import streamlit as st
-import requests
-from collections import Counter
-import re
+from openai import OpenAI
 
-st.set_page_config(page_title="Evperest Etsy Analyzer", layout="wide")
+st.set_page_config(page_title="Evperest Etsy SEO Generator", layout="wide")
 
-st.title("EVPEREST ETSY KEYWORD ANALYZER")
+st.title("EVPEREST ETSY SEO GENERATOR")
 
-st.write("Etsy keyword ve rakip analiz sistemi 🚀")
+st.write("AI destekli Etsy SEO title, tag ve description sistemi 🚀")
 
-keyword = st.text_input(
-    "Ana Keyword",
-    placeholder="Örnek: beige runner"
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+urun = st.text_input(
+    "Ürünü Yaz",
+    placeholder="Örnek: beige farmhouse tapestry"
 )
 
-if st.button("ETSY ANALİZ ET"):
+if st.button("SEO OLUŞTUR"):
 
-    st.info(f"{keyword} için Etsy analiz ediliyor...")
+    with st.spinner("SEO hazırlanıyor..."):
 
-    # ÖRNEK DEMO TITLELAR
-    demo_titles = [
-        "Beige Kitchen Runner Rug Farmhouse Decor",
-        "Neutral Hallway Runner Washable Rug",
-        "Farmhouse Kitchen Rug Minimalist Decor",
-        "Boho Beige Runner for Kitchen",
-        "Modern Neutral Runner Rug"
-    ]
+        prompt = f"""
+        Sen profesyonel Etsy SEO uzmanısın.
 
-    st.subheader("Rakip Titlelar")
+        Ürün:
+        {urun}
 
-    for title in demo_titles:
-        st.write("• " + title)
+        Şunları oluştur:
 
-    # Keyword çıkarma
-    all_words = []
+        1. Etsy SEO Title
+        - maksimum 140 karakter
+        - güçlü keyword kullan
+        - Etsy uyumlu olsun
 
-    for title in demo_titles:
-        words = re.findall(r'\\w+', title.lower())
-        all_words.extend(words)
+        2. 20 Etsy Tag
+        - kısa ve güçlü keywordler
+        - Etsy aramalarına uygun olsun
 
-    common_words = Counter(all_words).most_common(10)
+        3. Etsy Description
+        - profesyonel
+        - satış odaklı
+        - modern Etsy diliyle yaz
 
-    st.subheader("En Sık Geçen Keywordler")
+        4. Pinterest Başlığı
 
-    for word, count in common_words:
-        st.write(f"{word} → {count} kez")
+        Düzenli ve okunabilir yaz.
+        """
 
-    st.subheader("Ortalama Fiyat")
+        response = client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=[
+                {
+                    "role": "system",
+                    "content": "Sen profesyonel Etsy SEO uzmanısın."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ]
+        )
 
-    st.success("Tahmini fiyat aralığı: $35 - $70")
+        sonuc = response.choices[0].message.content
 
-    st.subheader("SEO Önerisi")
-
-    st.write("""
-    - farmhouse keywordünü kullan
-    - neutral decor güçlü görünüyor
-    - washable rug yükselen keyword
-    - minimalist decor iyi çalışıyor
-    """)
+        st.subheader("SEO SONUCU")
+        st.write(sonuc)
